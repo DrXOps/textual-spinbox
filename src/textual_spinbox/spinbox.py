@@ -47,14 +47,17 @@ class SpinBox(Widget):
 
     DEFAULT_CSS = """
     SpinBox {
-        height: 3;
-        min-height: 3;
+        height: 1;
+        min-height: 1;
+        #sb_box {
+            height: 1;
+            layout: horizontal;
+        }
         #sb_control {
             background: $background-lighten-1;
-            height: 3;
+            height: 1;
             width: 1;
-            position: relative;
-            offset: -3 0;
+            layout: vertical;
         }
         CellButton {
             color: $primary;
@@ -67,6 +70,7 @@ class SpinBox(Widget):
         }
         #sb_input {
             width: 100%;
+            height: 1;
         }
         #sb_overflow {
             height: 1;
