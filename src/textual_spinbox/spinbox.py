@@ -1,4 +1,9 @@
-"""Widget definitions for SpinBox — compatible with Textual 8.x."""
+"""Widget definitions for SpinBox — compatible with Textual 8.x.
+
+Flat layout: Input with overlaid increment/decrement buttons.
+No nested containers — just Input + CellButton children positioned
+via CSS offset. Keeps height minimal for embedding in toolbars.
+"""
 
 from __future__ import annotations
 
@@ -7,7 +12,6 @@ from rich.text import Text as RichText
 
 from textual import events
 from textual.app import ComposeResult, RenderResult
-from textual.containers import Horizontal, Vertical
 from textual.events import MouseScrollDown, MouseScrollUp
 from textual.pad import HorizontalPad
 from textual.widget import Widget
@@ -16,7 +20,7 @@ from textual.widgets import Button, Input, Static
 
 class CellButton(Button, can_focus=False):
     """A unit-width Button that issues scroll events instead of clicks.
-    Part of a SpinBox — no focus of its own."""
+    No focus of its own."""
 
     def on_mouse_up(self, event: events.MouseUp) -> None:
         event.stop()
@@ -43,34 +47,21 @@ class CellButton(Button, can_focus=False):
 
 
 class SpinBox(Widget):
-    """A spinbox widget with increment/decrement buttons and keyboard support."""
+    """A minimal spinbox: Input + increment/decrement buttons.
+
+    Flat widget — no container nesting. The buttons are siblings of
+    the Input, positioned in the rightmost cell via offset in CSS.
+    """
 
     DEFAULT_CSS = """
-    SpinBox #sb_box {
-        height: auto;
+    SpinBox {
         layout: horizontal;
-    }
-    SpinBox #sb_control {
-        background: $background-lighten-1;
-        width: auto;
-        layout: vertical;
-    }
-    SpinBox CellButton {
-        color: $primary;
-        background: $background-lighten-1;
-        min-width: 1;
-        width: 1;
-        border-top: none;
-        border-bottom: none;
     }
     SpinBox #sb_input {
         width: 100%;
     }
-    SpinBox #sb_overflow {
-        width: auto;
-        background: $background-lighten-1;
-        color: $text-muted;
-        text-align: center;
+    SpinBox CellButton {
+        width: 1;
     }
     """
 
@@ -140,17 +131,9 @@ class SpinBox(Widget):
             self.value = str(int(sb_input.value or "0") + dv)
         sb_input.value = self.value
         sb_input.action_home()
-        overflow = self.query_one("#sb_overflow", Static)
-        if len(self.value) > (getattr(sb_input.size, "width", 10) or 10):
-            overflow.update("…")
-        else:
-            overflow.update("¦")
         self.refresh(layout=True)
 
     def compose(self) -> ComposeResult:
-        with Horizontal(id="sb_box"):
-            yield Input(self.value, id="sb_input")
-            with Vertical(id="sb_control"):
-                yield CellButton("▲", id="sb_up")
-                yield Static("¦", id="sb_overflow")
-                yield CellButton("▼", id="sb_dn")
+        yield Input(self.value, id="sb_input")
+        yield CellButton("▲", id="sb_up")
+        yield CellButton("▼", id="sb_dn")
