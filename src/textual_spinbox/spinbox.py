@@ -46,39 +46,31 @@ class SpinBox(Widget):
     """A spinbox widget with increment/decrement buttons and keyboard support."""
 
     DEFAULT_CSS = """
-    SpinBox {
-        height: 1;
-        min-height: 1;
-        #sb_box {
-            height: 1;
-            layout: horizontal;
-        }
-        #sb_control {
-            background: $background-lighten-1;
-            height: 1;
-            width: 1;
-            layout: vertical;
-        }
-        CellButton {
-            color: $primary;
-            background: $background-lighten-1;
-            min-width: 1;
-            width: 1;
-            height: 1;
-            border-top: none;
-            border-bottom: none;
-        }
-        #sb_input {
-            width: 100%;
-            height: 1;
-        }
-        #sb_overflow {
-            height: 1;
-            width: 1;
-            background: $background-lighten-1;
-            color: $text-muted;
-            text-align: center;
-        }
+    SpinBox #sb_box {
+        height: auto;
+        layout: horizontal;
+    }
+    SpinBox #sb_control {
+        background: $background-lighten-1;
+        width: auto;
+        layout: vertical;
+    }
+    SpinBox CellButton {
+        color: $primary;
+        background: $background-lighten-1;
+        min-width: 1;
+        width: 1;
+        border-top: none;
+        border-bottom: none;
+    }
+    SpinBox #sb_input {
+        width: 100%;
+    }
+    SpinBox #sb_overflow {
+        width: auto;
+        background: $background-lighten-1;
+        color: $text-muted;
+        text-align: center;
     }
     """
 
